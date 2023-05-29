@@ -22,10 +22,10 @@ int main( int argc, char  **argv){
     matmul_CPU_serial(A, B, S, N);
 
     #pragma acc data create (A,B,C)
-    matmul_openacc(A,B,C);
+    matmul_openacc(A,B,C,N);
 
     #pragma acc data copyout (C)
-    if (!check_correctness(C, S))
+    if (!check_correctness(C, S, N))
         std::cout << " ERROR! different solutions" << std::endl;
 
     return 0;
