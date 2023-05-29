@@ -1,3 +1,6 @@
+#include <openacc.h>
+#include <cuda.h>
+
 #include <cstdlib>       /* srand, rand, atoi */
 #include <time.h>        /* time */
 #include <iostream>      /* cout */
@@ -5,11 +8,18 @@
 
 void matmul_openacc(const double *M1, const double *M2, double *MS, const int &N) {
 
-    #pragma acc parallel loop collapse(3) present(M1, M2, MS)
+    #pragma acc parallel loop collapse(2) present(M1, M2, MS)
     for (int i = 0; i < N; ++i)
-        for (int j = 0; j < N; ++j)
+        for (int j = 0; j < N; ++j) {
+
+            double sum = 0.0;
+            #pragma acc loop reduction(+:sum)
             for (int k = 0; k < N; ++k)
-                MS[i + j * N] += M1[k + j * N] * M2[i + k * N];
+                sum += M1[k + j * N] * M2[i + k * N];
+
+            MS[i + j * N] = sum;
+
+        }
 
 }
 
