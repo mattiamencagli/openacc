@@ -7,7 +7,7 @@ void matmul_CPU_serial(const double *M1, const double *M2, double *MS, const int
 
     for (int i = 0; i < N; ++i)
         for (int j = 0; j < N; ++j) {
-            double *MS_ptr = MS[i + j * N];
+            double *MS_ptr = MS + i + j * N;
             for (int k = 0; k < N; ++k)
                 *MS_ptr += M1[k + j * N] * M2[i + k * N];
         }
@@ -36,7 +36,7 @@ void assign_fix_values_to_matrix(double *M, const int &N, const double val) {
 }
 
 void print_matrix(double *M, const int &N, const std::string s = "") {
-    std::cout << ">>> matrix " << s << " :" setprecision(1) << setw(8) << std::endl;
+    std::cout << ">>> matrix " << s << " :" << setprecision(1) << setw(8) << std::endl;
     for (int i = 0; i < N; ++i) {
         for (int j = 0; j < N; ++j)
             std::cout << M[i + j * N];
