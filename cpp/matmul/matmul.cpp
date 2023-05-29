@@ -14,17 +14,19 @@ int main( int argc, char  **argv){
     double *C = new double[N*N];
     double *S = new double[N*N];
 
-    std::cout << "ciao" << std::endl;
-    assign_fix_values_to_matrix(A, N, 2);
-    assign_fix_values_to_matrix(B, N, 3);
-    print_matrix(A, N, "A");
-    print_matrix(B, N, "B");
-    std::cout << "ciao" << std::endl;
-
+    assign_random_values_to_matrix(A, N);
+    assign_random_values_to_matrix(B, N);
+    //print_matrix(A, N, "A");
+    //print_matrix(B, N, "B");
 
     matmul_CPU_serial(A, B, S, N);
 
-    print_matrix(S, N, "S");
+    #pragma acc data create (A,B,C)
+    matmul_openacc(A,B,C);
+
+    #pragma acc data copyout (C)
+    if (!check_correctness(C, S))
+        std::cout << " ERROR! different solutions" << std::endl;
 
     return 0;
 

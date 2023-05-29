@@ -3,6 +3,16 @@
 #include <iostream>      /* cout */
 #include <iomanip>       /* setprecision, setw */
 
+void matmul_openacc(const double *M1, const double *M2, double *MS, const int &N) {
+
+    #pragma acc parallel loop collapse(3) present(M1, M2, MS)
+    for (int i = 0; i < N; ++i)
+        for (int j = 0; j < N; ++j)
+            for (int k = 0; k < N; ++k)
+                MS[i + j * N] += M1[k + j * N] * M2[i + k * N];
+
+}
+
 void matmul_CPU_serial(const double *M1, const double *M2, double *MS, const int &N) {
 
     for (int i = 0; i < N; ++i)
