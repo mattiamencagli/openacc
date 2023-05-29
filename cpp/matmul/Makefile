@@ -1,5 +1,5 @@
 
-matmul:
+matmul.x:
 
 CC      = nvc++
 CFLAGS  = -c -acc -std=c++17 -gpu=rdc,managed,debug -Minfo=all -Minline=1000 -O -g
@@ -12,9 +12,9 @@ OBJ = matmul.o
 %.o: %.cpp
 	$(CC) $(CFLAGS) $(INCLUDE_DIRS) $< -o $@
 
-matmul: $(OBJ)
+matmul.x: $(OBJ)
 	$(CC) $(OBJ) $(LDFLAGS) -o $@
 
 clean:
-	@rm -f	*.o
+	@rm -f	*.o  *.x
 	@echo make clean: done
