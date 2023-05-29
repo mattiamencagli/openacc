@@ -36,10 +36,10 @@ void assign_fix_values_to_matrix(double *M, const int &N, const double val) {
 }
 
 void print_matrix(double *M, const int &N, const std::string s = "") {
-    std::cout << ">>> matrix " << s << " :" << std::setprecision(1) << std::setw(8) << std::endl;
+    std::cout << ">>> matrix " << s << " :" << std::endl;
     for (int i = 0; i < N; ++i) {
         for (int j = 0; j < N; ++j)
-            std::cout << M[i + j * N];
+            std::cout << std::setw(8)<< M[i + j * N];
         std::cout << std::endl;
     }
 }
