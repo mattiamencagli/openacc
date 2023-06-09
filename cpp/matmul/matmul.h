@@ -5,8 +5,11 @@
 #include <time.h>        /* time */
 #include <iostream>      /* cout */
 #include <iomanip>       /* setprecision, setw */
+#include <chrono>        /* high_resolution_clock */
 
-void matmul_openacc(const double *M1, const double *M2, double *MS, const int &N) {
+void matmul_openacc_1gpu(const double *M1, const double *M2, double *MS, const int &N) {
+
+    auto start = high_resolution_clock::now();
 
     #pragma acc parallel loop collapse(2) present(M1, M2, MS)
     for (int i = 0; i < N; ++i)
@@ -21,9 +24,14 @@ void matmul_openacc(const double *M1, const double *M2, double *MS, const int &N
 
         }
 
+    auto end = high_resolution_clock::now();
+    std::cout << " matmul_openacc_1gpu time : " << duration_cast<microseconds>(stop - start).count() << " ms" << std::endl;
+
 }
 
 void matmul_CPU_serial(const double *M1, const double *M2, double *MS, const int &N) {
+
+    auto start = high_resolution_clock::now();
 
     for (int i = 0; i < N; ++i)
         for (int j = 0; j < N; ++j) {
@@ -31,6 +39,9 @@ void matmul_CPU_serial(const double *M1, const double *M2, double *MS, const int
             for (int k = 0; k < N; ++k)
                 *MS_ptr += M1[k + j * N] * M2[i + k * N];
         }
+
+    auto end = high_resolution_clock::now();
+    std::cout << " matmul_CPU_serial time : " << duration_cast<microseconds>(stop - start).count() << " ms" << std::endl;
 
 }
 
@@ -42,9 +53,11 @@ bool check_correctness(const double *Sol, const double *SolTrue, const int &N) {
     return true;
 }
 
-void assign_random_values_to_matrix(double *M, const int &N) {
+void assign_random_values_to_matrix(double *M, const int &N, int seed = -1) {
     const int N2 = N * N;
-    srand(time(NULL));
+    if(seed == -1)
+        seed = time(NULL);
+    srand(seed);
     for (int i = 0; i < N2; ++i)
         M[i] = rand() % 10;
 }

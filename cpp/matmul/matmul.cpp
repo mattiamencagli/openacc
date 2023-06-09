@@ -8,7 +8,7 @@ int main( int argc, char  **argv){
     std::cout << " OpenACC - C++ " << std::endl;
     std::cout << " Matrix dimension : " << N << "x" << N << std::endl;
 
-    // dynamical allocation (equivalnt of malloc)
+    // dynamical allocation (equivalent of malloc)
     double *A = new double[N*N];
     double *B = new double[N*N];
     double *C = new double[N*N];
@@ -21,8 +21,11 @@ int main( int argc, char  **argv){
 
     matmul_CPU_serial(A, B, S, N);
 
-    #pragma acc data create (A,B,C)
-    matmul_openacc(A,B,C,N);
+    // Single GPU version
+    #pragma acc enter data create (A,B,C)
+    matmul_openacc_1gpu(A,B,C,N);
+
+
 
     #pragma acc data copyout (C)
     if (!check_correctness(C, S, N))
