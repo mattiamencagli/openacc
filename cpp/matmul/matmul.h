@@ -9,7 +9,7 @@
 
 void matmul_openacc_1gpu(const double *M1, const double *M2, double *MS, const int &N) {
 
-    auto start = high_resolution_clock::now();
+    auto start = std::chrono::high_resolution_clock::now();
 
     #pragma acc parallel loop collapse(2) present(M1, M2, MS)
     for (int i = 0; i < N; ++i)
@@ -24,14 +24,14 @@ void matmul_openacc_1gpu(const double *M1, const double *M2, double *MS, const i
 
         }
 
-    auto end = high_resolution_clock::now();
-    std::cout << " matmul_openacc_1gpu time : " << duration_cast<microseconds>(stop - start).count() << " ms" << std::endl;
+    auto end = std::chrono::high_resolution_clock::now();
+    std::cout << " matmul_openacc_1gpu time : " << std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count() * 1e-6 << " s" << std::endl;
 
 }
 
 void matmul_CPU_serial(const double *M1, const double *M2, double *MS, const int &N) {
 
-    auto start = high_resolution_clock::now();
+    auto start = std::chrono::high_resolution_clock::now();
 
     for (int i = 0; i < N; ++i)
         for (int j = 0; j < N; ++j) {
@@ -40,8 +40,8 @@ void matmul_CPU_serial(const double *M1, const double *M2, double *MS, const int
                 *MS_ptr += M1[k + j * N] * M2[i + k * N];
         }
 
-    auto end = high_resolution_clock::now();
-    std::cout << " matmul_CPU_serial time : " << duration_cast<microseconds>(stop - start).count() << " ms" << std::endl;
+    auto end = std::chrono::high_resolution_clock::now();
+    std::cout << " matmul_CPU_serial time : " << std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count() * 1e-6 << " s" << std::endl;
 
 }
 

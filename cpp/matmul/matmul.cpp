@@ -3,6 +3,7 @@
 int main( int argc, char  **argv){
 
     int N = std::atoi(argv[1]);
+    bool check=false;
 
     std::cout << " Matrix moltiplication " << std::endl;
     std::cout << " OpenACC - C++ " << std::endl;
@@ -12,14 +13,17 @@ int main( int argc, char  **argv){
     double *A = new double[N*N];
     double *B = new double[N*N];
     double *C = new double[N*N];
-    double *S = new double[N*N];
+    double *S;
+    if(check)
+        S = new double[N*N];
 
     assign_random_values_to_matrix(A, N);
     assign_random_values_to_matrix(B, N);
     //print_matrix(A, N, "A");
     //print_matrix(B, N, "B");
 
-    matmul_CPU_serial(A, B, S, N);
+    if(check)
+        matmul_CPU_serial(A, B, S, N);
 
     // Single GPU version
     #pragma acc enter data create (A,B,C)
@@ -28,7 +32,7 @@ int main( int argc, char  **argv){
 
 
     #pragma acc data copyout (C)
-    if (!check_correctness(C, S, N))
+    if (check && !check_correctness(C, S, N))
         std::cout << " ERROR! different solutions" << std::endl;
 
     return 0;
