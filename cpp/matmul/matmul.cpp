@@ -8,6 +8,7 @@ int main( int argc, char  **argv){
     std::cout << " Matrix moltiplication " << std::endl;
     std::cout << " OpenACC - C++ " << std::endl;
     std::cout << " Matrix dimension : " << N << "x" << N << std::endl;
+    std::cout << " Check : " << check << std::endl;
 
     // dynamical allocation (equivalent of malloc)
     double *A = new double[N*N];
@@ -29,12 +30,11 @@ int main( int argc, char  **argv){
     #pragma acc enter data create (A,B,C)
     matmul_openacc_1gpu(A,B,C,N);
 
-
-
-    #pragma acc data copyout (C)
-    if (check && !check_correctness(C, S, N))
-        std::cout << " ERROR! different solutions" << std::endl;
-
+	if(check) {
+    	#pragma acc data copyout (C)
+    	if (!check_correctness(C, S, N))
+        	std::cout << " ERROR! different solutions" << std::endl;
+	}
     return 0;
 
 }
