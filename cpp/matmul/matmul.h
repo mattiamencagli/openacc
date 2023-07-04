@@ -24,7 +24,7 @@ void matmul_openacc_1gpu(const double *M1, const double *M2, double *MS, const i
 
         }
 
-    auto end = std::chrono::high_resolution_clock::now();
+    auto stop = std::chrono::high_resolution_clock::now();
     std::cout << " matmul_openacc_1gpu time : " << std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count() * 1e-6 << " s" << std::endl;
 
 }
@@ -40,7 +40,7 @@ void matmul_CPU_serial(const double *M1, const double *M2, double *MS, const int
                 *MS_ptr += M1[k + j * N] * M2[i + k * N];
         }
 
-    auto end = std::chrono::high_resolution_clock::now();
+    auto stop = std::chrono::high_resolution_clock::now();
     std::cout << " matmul_CPU_serial time : " << std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count() * 1e-6 << " s" << std::endl;
 
 }
