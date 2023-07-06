@@ -44,9 +44,9 @@ double montecarlo_pi_1GPU(const size_t &N, int seed = -1) {
     srand(seed);
 
     int *circle = new int[N];
-    #pragma acc enter data create (circle)
+    #pragma acc enter data create(circle)
 
-    #pragma acc loop copy(N)
+    #pragma acc loop firstprivate(N)
     for (size_t i = 0; i < N; ++i){
         double x = double(rand()) / RAND_MAX;
         double y = double(rand()) / RAND_MAX;
@@ -54,10 +54,17 @@ double montecarlo_pi_1GPU(const size_t &N, int seed = -1) {
             circle[i] = 4;
     }
 
-    double pi = double(circle) / double(N);
+	size_t c = 0;
+	#pragma acc loop reduction(+:c)
+	for (size_t i = 0; i < N; ++i){
+            c += circle[i];
+    }
+
+	#pragma acc data copyout(c)
+    double pi = double(c) / double(N);
 
     auto stop = std::chrono::high_resolution_clock::now();
-    std::cout << " montecarlo_pi time : " << std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count() * 1e-6 << " s" << std::endl;
+    std::cout << " montecarlo_pi_1GPU time : " << std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count() * 1e-6 << " s" << std::endl;
 
     return pi;
 }

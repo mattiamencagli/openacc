@@ -9,7 +9,7 @@ int main(int argc, char  **argv){
     std::cout << " number of points : " << N << std::endl;
 
     // Single GPU version
-    double PI_m = montecarlo_pi(N);
+    double PI_m = montecarlo_pi_1GPU(N);
 
     check_correctness(PI_m);
     
