@@ -35,6 +35,7 @@ int main( int argc, char  **argv){
     	if (!check_correctness(C, S, N))
         	std::cout << " ERROR! different solutions" << std::endl;
 	}
-    return 0;
+    
+	return 0;
 
 }
