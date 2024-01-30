@@ -3,7 +3,7 @@
 int main( int argc, char  **argv){
 
     int N = std::atoi(argv[1]);
-    bool check=false;
+    bool check=true;
 
     std::cout << " Matrix moltiplication " << std::endl;
     std::cout << " OpenACC - C++ " << std::endl;

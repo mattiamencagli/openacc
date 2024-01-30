@@ -1,0 +1,1 @@
+nvc++ misal_mem_test.cpp -acc -Minfo=accel -gpu=rdc,managed,lineinfo
